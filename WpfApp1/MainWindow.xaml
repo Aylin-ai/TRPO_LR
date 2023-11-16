@@ -1,0 +1,340 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1" 
+        xmlns:vm="clr-namespace:WpfApp1.ViewModels"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="800">
+
+    <Window.Resources>
+        <Style x:Key="ScreenTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#4CAF50"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Storyboard x:Key="OpenDoorAnimation">
+            <DoubleAnimation Storyboard.TargetName="LeftDoor" Storyboard.TargetProperty="Width" To="0" Duration="0:0:2"/>
+            <DoubleAnimation Storyboard.TargetName="RightDoor" Storyboard.TargetProperty="Width" To="0" Duration="0:0:2"/>
+        </Storyboard>
+
+        <Storyboard x:Key="CloseDoorAnimation">
+            <DoubleAnimation Storyboard.TargetName="LeftDoor" Storyboard.TargetProperty="Width" To="125" Duration="0:0:2"/>
+            <DoubleAnimation Storyboard.TargetName="RightDoor" Storyboard.TargetProperty="Width" To="125" Duration="0:0:2"/>
+        </Storyboard>
+
+    </Window.Resources>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Column="0">
+
+            <Border BorderBrush="Black" 
+                    BorderThickness="1" 
+                    Background="White" 
+                    Margin="10"
+                    DockPanel.Dock="Top">
+                <TextBlock HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           Style="{StaticResource ScreenTextStyle}"
+                           Text="{Binding FloorOffset}"/>   
+            </Border>
+
+            <!-- Лифт кабина -->
+            <Border BorderBrush="Black" 
+                    BorderThickness="1" 
+                    Background="White" 
+                    Width="250" Height="380" 
+                    VerticalAlignment="Bottom"> 
+                <Grid>
+                    <!-- Левая дверь -->
+                    <Border x:Name="LeftDoor" 
+                            Background="White" 
+                            Width="125" Height="380" 
+                            HorizontalAlignment="Left"
+                            BorderBrush="Black"
+                            BorderThickness="1">
+                    </Border>
+
+                    <!-- Правая дверь -->
+                    <Border x:Name="RightDoor" 
+                            Background="White" 
+                            Width="125" Height="380" 
+                            HorizontalAlignment="Right"
+                            BorderBrush="Black"
+                            BorderThickness="1">
+                    </Border>
+                </Grid>
+            </Border>
+
+
+        </DockPanel>
+
+        <DockPanel Grid.Column="1"
+                   LastChildFill="True">
+
+            <DockPanel.Resources>
+                <Style x:Key="ElevatorButtonStyle" TargetType="Button">
+                    <Setter Property="Width" Value="50"/>
+                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Background" Value="#4CAF50"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="BorderBrush" Value="#388E3C"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="{TemplateBinding BorderThickness}" 
+                                            CornerRadius="50"/>
+                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                      VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#45A047"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#2E7D32"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+                <Style x:Key="ControlButtonStyle" TargetType="Button">
+                    <Setter Property="Width" Value="50"/>
+                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Background" Value="#4CAF50"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="BorderBrush" Value="#388E3C"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="{TemplateBinding BorderThickness}" 
+                                            CornerRadius="50"/>
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#45A047"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#2E7D32"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+            </DockPanel.Resources>
+
+            <Border BorderBrush="Black" 
+                    BorderThickness="1" 
+                    Background="White" 
+                    Margin="10"
+                    DockPanel.Dock="Top">
+                <TextBlock HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           Style="{StaticResource ScreenTextStyle}"
+                           Text="{Binding FloorOffset}"/>
+            </Border>
+
+            <StackPanel HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        DockPanel.Dock="Bottom"
+                        Orientation="Horizontal">
+                <Button Content="Д" 
+                        IsEnabled="{Binding IsCallDispatcherButtonEnabled}"
+                        Style="{StaticResource ControlButtonStyle}"
+                        Command="{Binding CallDispatcherCommand}"/>
+                <Button Content="О" 
+                        IsEnabled="{Binding IsOpenButtonEnabled}"
+                        Style="{StaticResource ControlButtonStyle}"
+                        Command="{Binding OpenElevatorCommand}"/>
+                <Button Content="З" 
+                        IsEnabled="{Binding IsCloseButtonEnabled}"
+                        Style="{StaticResource ControlButtonStyle}"
+                        Command="{Binding CloseElevatorCommand}"/>
+            </StackPanel>
+
+            <!-- Кнопки этажей -->
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Кнопки этажей от 1 до 9 -->
+                <Button Grid.Row="0" Grid.Column="0" 
+                        Content="1" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="1"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+                <Button Grid.Row="0" Grid.Column="1" 
+                        Content="2" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="2"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+                <Button Grid.Row="0" Grid.Column="2" 
+                        Content="3" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="3"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+                <Button Grid.Row="1" Grid.Column="0" 
+                        Content="4" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="4"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+                <Button Grid.Row="1" Grid.Column="1" 
+                        Content="5" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="5"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+                <Button Grid.Row="1" Grid.Column="2" 
+                        Content="6" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="6"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+
+                <Button Grid.Row="2" Grid.Column="0" 
+                        Content="7" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="7"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+                <Button Grid.Row="2" Grid.Column="1" 
+                        Content="8" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="8"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+                <Button Grid.Row="2" Grid.Column="2" 
+                        Content="9" 
+                        Style="{StaticResource ElevatorButtonStyle}"
+                        Command="{Binding MoveElevatorCommand}" CommandParameter="9"
+                        IsEnabled="{Binding IsButtonsEnabled}"/>
+            </Grid>
+
+        </DockPanel>
+
+        <DockPanel Grid.Column="2"
+                   LastChildFill="True">
+
+            <ComboBox DockPanel.Dock="Top"
+                      ItemsSource="{Binding Floors}"
+                      SelectedItem="{Binding SelectedFloor}"
+                      Background="White"
+                      Foreground="Black"
+                      BorderBrush="Black" BorderThickness="1"
+                      Margin="10"/>
+
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Vertical">
+                
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Человек в лифте - "/>
+                    <Label Content="{Binding IsHumanInElevator}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderBrush" Value="Black"/>
+                            <Setter Property="Width" Value="100"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Content="Зайти"
+                            Command="{Binding EnterElevatorCommand}"
+                            IsEnabled="{Binding IsHumanButtonsEnabled}"/>
+                    <Button Content="Выйти"
+                            Command="{Binding LeaveElevatorCommand}"
+                            IsEnabled="{Binding IsHumanButtonsEnabled}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel VerticalAlignment="Center" 
+                        HorizontalAlignment="Center">
+                <Button Content="Вызов" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center" 
+                        Width="60" Height="60"
+                        IsEnabled="{Binding IsCallButtonEnabled}"
+                        Command="{Binding CallElevatorCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#4CAF50"/>
+                            <!-- Задайте желаемый цвет фона -->
+                            <Setter Property="Foreground" Value="White"/>
+                            <!-- Задайте желаемый цвет текста -->
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="BorderBrush" Value="#388E3C"/>
+                            <!-- Задайте желаемый цвет границы -->
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Grid>
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                                    CornerRadius="50"/>
+                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                              VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#45A047"/>
+                                    <!-- Задайте цвет фона при наведении -->
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#2E7D32"/>
+                                    <!-- Задайте цвет фона при нажатии -->
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+
+        </DockPanel>
+        
+    </Grid>
+    
+</Window>
